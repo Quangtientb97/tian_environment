@@ -1,0 +1,5 @@
+file.xml, ahbstatSlave_reg_blk_c, reg_blk_0, 0x03 
+file.xml, ahbstatSlave_reg_blk_c, reg_blk_1, 0x03 
+file.xml, ahbstatSlave_reg_blk_c, reg_blk_2, 0x03 
+file.xml, ahbstatSlave_reg_blk_c, reg_blk_3, 0x03 
+file.xml, ahbstatSlave_reg_blk_c, reg_blk_4, 0x03 

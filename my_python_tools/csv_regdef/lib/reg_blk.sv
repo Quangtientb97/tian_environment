@@ -1,0 +1,67 @@
+// --------------------------------------------
+// File Name   : reg_blk.sv
+// Description :
+// Developers  :
+// Created     :
+// Generator   : csv_regdef
+// --------------------------------------------
+
+`ifndef SEC_REG_COVERAGE_MODEL_E
+`define SEC_REG_COVERAGE_MODEL_E
+typedef enum {
+	SEC_CVR_REG_DIRECTION = 'h0010
+} sec_reg_coverage_model_e;
+`endif //SEC_REG_COVERAGE_MODEL_E
+
+`ifndef SUV_REG_BLK_C
+`define SUV_REG_BLK_C
+
+// -----------------------------------------------------------
+// Register block definition for Top-level verification env
+// -----------------------------------------------------------
+
+class reg_blk_c extends uvm_reg_block;
+
+	__REG_BLK_C_PROPERTY__
+
+	uvm_reg_map axi_map;
+
+	`uvm_object_utils_begin(reg_blk_c)
+	`uvm_object_utils_end
+
+	function new(string name = "reg_blk_c");
+
+		super.new(name, .has_coverage(UVM_NO_COVERAGE));
+		`uvm_info(get_full_name(), "new() ...", UVM_FULL)
+
+	endfunction	// new
+
+	//--------------------------------------------------------
+	//  Construct register file and register base address to address map 
+	//--------------------------------------------------------
+	virtual function void build();
+		`uvm_info(get_full_name(), "build() ...", UVM_FULL)
+
+		axi_map = create_map("axi_map", `SEC_REG_BOOT_BASE_ADDR, `UVM_REG_DATA_WIDTH/8, UVM_LITTLE_ENDIAN, 0);
+
+		default_map = axi_map;
+
+		__BUILD_REG_CLK_C_PROPERTY__
+
+		lock_model();
+
+	endfunction	// build
+
+	// Fuction and tasks for blocking operation
+	// This function is also used to solve the UVM limitation
+	// which returns wrong value in mirror(), read() commands
+	
+	virtual function void axi_set_sequence_base(uvm_sequence_base parent = null);
+		`uvm_info(get_full_name(), "axi_set_sequence_base() ...", UVM_FULL)
+		__SET_SEQ_BASE_PROPERTY__
+
+	endfunction	// axi_set_sequence_base
+	
+endclass: reg_blk_c
+
+`endif //SUV_REG_BLK_C

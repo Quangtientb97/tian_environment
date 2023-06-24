@@ -1,0 +1,58 @@
+-------------------------
+- xml tree for csv_regdef
+-------------------------
+|-- component
+	|-- vendor
+	|-- library
+	|-- name
+	|-- busInterfaces
+		|-- busInterface
+		|-- busInterface
+		|-- ...
+	|-- memoryMaps
+		|-- memoryMap
+			|-- addressBlock
+				|-- register
+					|-- name
+					|-- description
+					|-- addressOffset       0x4 hex
+					|-- size                32 dec
+					|-- reset
+						|-- value            0xff hex
+					|-- access              read-only write-only read-write
+					|-- field
+						|-- name
+						|-- bitOffset        0  dec
+						|-- bitWidth         20 dec
+						|-- access           read-only write-only read-write
+				|-- register
+				|-- register
+				|-- ...
+
+-------------------------------------------------------------------
+-  xml register example
+-------------------------------------------------------------------
+<register>
+	<name>PLL_LOCKTIME_PLL_SHARED0</name>
+	<description>Lock time control of PLL: PLL_SHARED0</description>
+	<addressOffset>0x4</addressOffset>
+	<size>32</size>
+	<access>read-write</access>
+	<reset>
+		<value>0xfff</value>
+	</reset>
+	<field>
+		<name>PLL_LOCK_TIME</name>
+		<description>PLL lock time programing</description>
+		<bitOffset>0</bitOffset>
+		<bitWidth>20</bitWidth>
+		<access>read-write</access>
+	</field>
+	<field>
+		<name>RESET_REQ_TIME</name>
+		<description>reset time request</description>
+		<bitOffset>24</bitOffset>
+		<bitWidth>6</bitWidth>
+		<access>read-only</access>
+	</field>
+</register>

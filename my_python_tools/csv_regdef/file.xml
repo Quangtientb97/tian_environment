@@ -1,0 +1,841 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+// Example component used to show schema elements defined by the
+// IP-XACT standard. Links within this file refer to schema figures in
+// the standard definition document.
+-->
+<!-- LINK: component: see 6.1, Component -->
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:ipxact="http://www.accellera.org/XMLSchema/IPXACT/1685-2014"
+                  xsi:schemaLocation="http://www.accellera.org/XMLSchema/IPXACT/1685-2014
+                                      index.xsd">
+  <vendor>accellera.org</vendor>
+  <library>Sample</library>
+  <name>SampleComponent</name>
+  <version>1.0</version>
+  <busInterfaces>
+    <!-- LINK: busInterface: 6.5.1, busInterface -->
+    <!-- Basic slave interface with both RTL and TLM representations -->
+    <busInterface>
+      <name>Slave</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <!-- LINK: abstractionTypes: 6.5.6, Abstraction types -->
+      <abstractionTypes>
+        <abstractionType>
+          <viewRef>RTLview</viewRef>
+          <abstractionRef vendor="accellera.org" library="Sample"
+                                 name="SampleAbstractionDefinition_RTL" version="1.0">
+            <!-- Configure abstraction to have the 'Parity' logical port -->
+            <configurableElementValues>
+              <configurableElementValue referenceId="UsingParity">1
+              </configurableElementValue>
+            </configurableElementValues>
+          </abstractionRef>
+          <portMaps>
+            <!-- LINK: portMap: 6.5.7, Port map -->
+            <portMap>
+              <logicalPort>
+                <name>Data</name>
+              </logicalPort>
+              <physicalPort>
+                <name>slv_data</name>
+                <partSelect>
+                  <range>
+                    <left>7</left>
+                    <right>0</right>
+                  </range>
+                </partSelect>
+              </physicalPort>
+            </portMap>
+            <portMap>
+              <logicalPort>
+                <name>Address</name>
+              </logicalPort>
+              <physicalPort>
+                <name>slv_addr</name>
+              </physicalPort>
+            </portMap>
+            <portMap>
+              <logicalPort>
+                <name>Parity</name>
+              </logicalPort>
+              <physicalPort>
+                <name>slv_parity</name>
+              </physicalPort>
+            </portMap>
+            <!-- Mapping to clock port included for 'information' only - not
+                 for connecting -->
+            <portMap>
+              <logicalPort>
+                <name>Clk</name>
+              </logicalPort>
+              <physicalPort>
+                <name>clk</name>
+              </physicalPort>
+              <isInformative>true</isInformative>
+            </portMap>
+          </portMaps>
+        </abstractionType>
+        <abstractionType>
+          <viewRef>TLMview</viewRef>
+          <abstractionRef vendor="accellera.org" library="Sample"
+                                 name="SampleAbstractionDefinition_TLM" version="1.0"/>
+          <portMaps>
+            <portMap>
+              <logicalPort>
+                <name>Transport</name>
+              </logicalPort>
+              <physicalPort>
+                <name>slv_transaction</name>
+              </physicalPort>
+            </portMap>
+          </portMaps>
+        </abstractionType>
+      </abstractionTypes>
+      <!-- LINK: interfaceMode: see 6.5.2, Interface modes -->
+      <!-- LINK: slave: see 6.5.4, Slave interface -->
+      <slave>
+        <memoryMapRef memoryMapRef="SimpleMapWithBlock"/>
+      </slave>
+      <!-- This interface must be connected in any containing design -->
+      <connectionRequired>true</connectionRequired>
+    </busInterface>
+    <!-- Basic master interface with both RTL and TLM representations -->
+    <busInterface>
+      <name>Master</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <abstractionTypes>
+        <abstractionType>
+          <viewRef>RTLview</viewRef>
+          <abstractionRef vendor="accellera.org" library="Sample"
+                                 name="SampleAbstractionDefinition_RTL" version="1.0">
+            <!-- Configure abstraction to not have the 'Parity' logical port -->
+            <!-- This is the default but included to make it explicit -->
+            <configurableElementValues>
+              <configurableElementValue referenceId="UsingParity">0
+              </configurableElementValue>
+            </configurableElementValues>
+          </abstractionRef>
+          <portMaps>
+            <portMap>
+              <logicalPort>
+                <name>Data</name>
+              </logicalPort>
+              <physicalPort>
+                <name>mst_data</name>
+              </physicalPort>
+            </portMap>
+            <portMap>
+              <logicalPort>
+                <name>Address</name>
+              </logicalPort>
+              <physicalPort>
+                <name>mst_addr</name>
+              </physicalPort>
+            </portMap>
+            <!-- Mapping to clock port included for 'information' only - not
+                 for connecting -->
+            <portMap>
+              <logicalPort>
+                <name>Clk</name>
+              </logicalPort>
+              <physicalPort>
+                <name>clk</name>
+              </physicalPort>
+              <isInformative>true</isInformative>
+            </portMap>
+          </portMaps>
+        </abstractionType>
+        <abstractionType>
+          <viewRef>TLMview</viewRef>
+          <abstractionRef vendor="accellera.org" library="Sample"
+                                 name="SampleAbstractionDefinition_TLM" version="1.0"/>
+          <portMaps>
+            <portMap>
+              <logicalPort>
+                <name>Transport</name>
+              </logicalPort>
+              <physicalPort>
+                <name>mst_transaction</name>
+              </physicalPort>
+            </portMap>
+          </portMaps>
+        </abstractionType>
+      </abstractionTypes>
+      <!-- LINK: master: see 6.5.3, Master interface -->
+      <master>
+        <addressSpaceRef addressSpaceRef="simpleAddressSpace"/>
+      </master>
+    </busInterface>
+    <busInterface>
+      <name>MirroredMaster</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <mirroredMaster/>
+    </busInterface>
+    <busInterface>
+      <name>MirroredSlave</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <!-- LINK: master: see 6.5.5, Mirrored slave interface -->
+      <mirroredSlave>
+        <baseAddresses>
+          <remapAddress>0x40000000</remapAddress>
+          <range>0x1000</range>
+        </baseAddresses>
+      </mirroredSlave>
+    </busInterface>
+    <busInterface>
+      <name>SlaveWithTransparentBridge</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <slave>
+        <transparentBridge masterRef="Master"/>
+      </slave>
+    </busInterface>
+    <busInterface>
+      <name>SlaveForSubspaceMap</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <slave>
+        <memoryMapRef memoryMapRef="SimpleMapWithSubspace"/>
+      </slave>
+    </busInterface>
+    <busInterface>
+      <name>Monitor</name>
+      <busType vendor="accellera.org" library="Sample"
+                      name="SampleBusDefinition" version="1.0"/>
+      <monitor interfaceMode="slave"/>
+    </busInterface>
+  </busInterfaces>
+  <indirectInterfaces>
+    <!-- LINK: indirectInterface: see 6.6, Indirect interfaces -->
+    <indirectInterface>
+      <name>IndirectMemoryInterface</name>
+      <indirectAddressRef>IAR</indirectAddressRef>
+      <indirectDataRef>IDR</indirectDataRef>
+      <memoryMapRef>MapForMemory</memoryMapRef>
+    </indirectInterface>
+  </indirectInterfaces>
+  <channels>
+    <!-- LINK: channel: see 6.7, Component channels -->
+    <channel>
+      <name>theChannel</name>
+      <busInterfaceRef>
+        <localName>MirroredMaster</localName>
+      </busInterfaceRef>
+      <busInterfaceRef>
+        <localName>MirroredSlave</localName>
+      </busInterfaceRef>
+    </channel>
+  </channels>
+  <remapStates>
+    <!-- LINK: remapStates: see 6.10.2, Remap states-->
+    <remapState>
+      <name>Boot</name>
+      <description>Defines the remap state associated with the component at boot time.</description>
+    </remapState>
+    <remapState>
+      <name>Normal</name>
+      <description>Defines the remap state associated with the component after boot time.</description>
+    </remapState>
+  </remapStates>
+  <addressSpaces>
+    <!-- LINK: addressSpace: see 6.8.1, addressSpaces -->
+    <addressSpace>
+      <name>simpleAddressSpace</name>
+      <range>4*(2**30)</range>
+      <width>32</width>
+    </addressSpace>
+  </addressSpaces>
+  <memoryMaps>
+    <!-- LINK: memoryMap: see 6.9.1, memoryMaps -->
+    <memoryMap>
+      <name>SimpleMapWithBlock</name>
+      <!-- Address block starts at address 0, containing 1024 addressable 8-
+           bit -->
+      <!-- units, organized into larger 32-bit units. -->
+      <!-- LINK: addressBlock: see 6.9.2, Address block -->
+      <addressBlock>
+        <name>SimpleAddressBlock</name>
+        <baseAddress>0x0</baseAddress>
+        <!-- LINK: addressBlockDefinitionGroup: see 6.9.3, Address block
+             definition group -->
+        <range>2**10</range>
+        <width>32</width>
+        <!-- LINK: memoryBlockData: see 6.9.4, memoryBlockData group -->
+        <usage>register</usage>
+        <volatile>false</volatile>
+        <access>read-write</access>
+        <!-- LINK: registerData: see 6.11.1, Register data -->
+        <!-- LINK: register: see 6.11.2, Register -->
+        <register>
+          <name>BasicRegister</name>
+          <addressOffset>0x4</addressOffset>
+          <!-- LINK: registerDefinitionGroup: see 6.11.3, Register definition
+               group -->
+          <size>32</size>
+          <volatile>true</volatile>
+          <access>read-writeOnce</access>
+          <!-- LINK: field: see 6.11.8, Register bit fields -->
+          <field>
+            <name>F1</name>
+            <bitOffset>0</bitOffset>
+            <resets>
+              <reset>
+                <value>0x0</value>
+              </reset>
+              <reset resetTypeRef="SOFT">
+                <value>0xf</value>
+                <mask>0xa</mask>
+              </reset>
+            </resets>
+            <bitWidth>4</bitWidth>
+            <!-- LINK: fieldData: see 6.11.9 Field data group -->
+            <access>writeOnce</access>
+            <!-- Document pre-defined values that can be written to this field -->
+            <enumeratedValues>
+              <!-- LINK: enumeratedValue: see 6.11.10, Enumeration values -->
+              <enumeratedValue>
+                <name>SetPos0</name>
+                <value>0x1</value>
+              </enumeratedValue>
+              <enumeratedValue>
+                <name>SetPos1</name>
+                <value>0x2</value>
+              </enumeratedValue>
+            </enumeratedValues>
+          </field>
+          <field>
+            <name>F2</name>
+            <bitOffset>4</bitOffset>
+            <resets>
+              <reset>
+                <value>0x0</value>
+              </reset>
+            </resets>
+            <bitWidth>4</bitWidth>
+            <modifiedWriteValue>oneToClear</modifiedWriteValue>
+            <readAction>modify</readAction>
+            <testable testConstraint="readOnly">true</testable>
+          </field>
+          <field>
+            <name>F3</name>
+            <bitOffset>8</bitOffset>
+            <bitWidth>4</bitWidth>
+            <!-- LINK: writeValueConstraint: see 6.11.11, Write value constraint
+            -->
+            <writeValueConstraint>
+              <minimum>0x1</minimum>
+              <maximum>0x2</maximum>
+            </writeValueConstraint>
+          </field>
+          <field>
+            <name>F4</name>
+            <bitOffset>12</bitOffset>
+            <bitWidth>20</bitWidth>
+            <reserved>true</reserved>
+          </field>
+        </register>
+        <register>
+          <name>RegisterWithAlternate</name>
+          <addressOffset>0x10</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <field>
+            <name>F</name>
+            <bitOffset>0</bitOffset>
+            <bitWidth>32</bitWidth>
+          </field>
+          <alternateRegisters>
+            <!-- LINK: alternateRegister: see 6.11.4, Alternate register -->
+            <alternateRegister>
+              <name>Alternate1</name>
+              <alternateGroups>
+                <alternateGroup>AltRegGroup</alternateGroup>
+              </alternateGroups>
+              <!-- LINK: alternateRegisterDefinitionGroup: see 6.11.5, Alternate
+                   register definition group -->
+              <access>read-only</access>
+              <field>
+                <name>F</name>
+                <bitOffset>0</bitOffset>
+                <bitWidth>32</bitWidth>
+              </field>
+            </alternateRegister>
+          </alternateRegisters>
+        </register>
+        <!-- 8 registers combined in an array with 32 bit gap -->
+        <!-- LINK: registerFile: see 6.11.6, Register file -->
+        <registerFile>
+          <name>RegisterArray</name>
+          <dim>8</dim>
+          <addressOffset>0x200</addressOffset>
+          <range>0x10</range>
+          <register>
+            <name>RegArrayEntry</name>
+            <addressOffset>0x0</addressOffset>
+            <size>32</size>
+            <field>
+              <name>MandatoryField</name>
+              <bitOffset>0</bitOffset>
+              <bitWidth>32</bitWidth>
+            </field>
+          </register>
+        </registerFile>
+      </addressBlock>
+      <addressUnitBits>8</addressUnitBits>
+    </memoryMap>
+    <memoryMap>
+      <name>SimpleMapWithBank</name>
+      <!-- Serial bank with two memory blocks of 1 k units of 32-bit data. -->
+      <!-- The only address specified is 0x10000, but this causes address block
+      -->
+      <!-- ram0 and ram1 to be mapped to addresses 0x10000 and 0x11000
+           respectively. -->
+      <!-- LINK: addressBank: see 6.9.5, Bank -->
+      <bank bankAlignment="serial">
+        <name>SerialBank</name>
+        <baseAddress>0x1000</baseAddress>
+        <addressBlock>
+          <name>ram0</name>
+          <range>0x1000</range>
+          <width>32</width>
+        </addressBlock>
+        <addressBlock>
+          <name>ram1</name>
+          <range>0x1000</range>
+          <width>32</width>
+        </addressBlock>
+      </bank>
+    </memoryMap>
+    <memoryMap>
+      <name>SimpleMapWithSubspace</name>
+      <!-- Address space from master interface 'Master' mapped into slave
+           interface -->
+      <!-- SlaveForSubspaceMap at address 0x10000 -->
+      <!-- LINK: subspaceMap: see 6.9.9, Subsapce map -->
+      <subspaceMap masterRef="Master">
+        <name>SubSpace</name>
+        <baseAddress>0x10000</baseAddress>
+      </subspaceMap>
+    </memoryMap>
+    <memoryMap>
+      <name>MapForMemory</name>
+      <addressBlock>
+        <name>MemoryBlock</name>
+        <baseAddress>0x0</baseAddress>
+        <range>2**10</range>
+        <width>32</width>
+        <usage>memory</usage>
+        <access>read-write</access>
+      </addressBlock>
+    </memoryMap>
+  </memoryMaps>
+  <!-- LINK: model: see 6.12.1, Model -->
+  <model>
+    <views>
+      <view>
+        <name>RTLview</name>
+        <displayName>RTL View</displayName>
+        <description>Simple RTL view of a component.</description>
+        <envIdentifier>:*Synthesis:</envIdentifier>
+        <componentInstantiationRef>VerilogModel</componentInstantiationRef>
+      </view>
+      <view>
+        <name>TLMview</name>
+        <displayName>TLM View</displayName>
+        <description>Simple TLM view of a component.</description>
+        <isPresent>TLMModelsAvailable</isPresent>
+        <envIdentifier>:*Simulation:</envIdentifier>
+        <componentInstantiationRef>TLMModel</componentInstantiationRef>
+      </view>
+    </views>
+    <instantiations>
+      <!-- LINK: instantiationsGroup: see 6.12.2, instantiationsGroup -->
+      <!-- LINK: componentInstantiation: see 6.12.3, componentInstantiation -->
+      <componentInstantiation>
+        <name>VerilogModel</name>
+        <language>verilog</language>
+        <moduleName>sample</moduleName>
+        <!-- LINK: moduleParameters: see 6.12.6, Module parameters -->
+        <moduleParameters>
+          <moduleParameter type="bit">
+            <name>dual_mode_reg_value</name>
+            <vectors>
+              <vector>
+                <left>3</left>
+                <right>0</right>
+              </vector>
+            </vectors>
+            <value>comp_dual_mode?4'hf:4'h0</value>
+          </moduleParameter>
+        </moduleParameters>
+        <fileSetRef>
+          <localName>VerilogFiles</localName>
+        </fileSetRef>
+      </componentInstantiation>
+      <componentInstantiation>
+        <name>TLMModel</name>
+        <language>SystemC</language>
+        <moduleName>sample</moduleName>
+        <moduleParameters>
+          <moduleParameter type="bit">
+            <name>dual_mode</name>
+            <value>comp_dual_mode</value>
+          </moduleParameter>
+          <moduleParameter parameterId="vdp" resolve="generated"
+                                  type="bit">
+            <name>view_dependent_param</name>
+            <value>0</value>
+          </moduleParameter>
+        </moduleParameters>
+        <fileSetRef>
+          <localName>SystemCFiles</localName>
+        </fileSetRef>
+      </componentInstantiation>
+    </instantiations>
+    <ports>
+      <!-- LINK: port: see 6.12.7, Component ports -->
+      <port>
+        <name>slv_data</name>
+        <!-- LINK: wire: see 6.12.8, Component wire ports -->
+        <wire>
+          <direction>in</direction>
+          <vectors>
+            <vector>
+              <left>15</left><right>0</right>
+            </vector>
+          </vectors>
+          <wireTypeDefs>
+            <!-- LINK: wireTypeDef: see 6.12.9, Component wireTypeDef -->
+            <wireTypeDef>
+              <typeName>logic</typeName>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+          <!-- Default upper 8 bits since the interface only uses 8 bits -->
+          <drivers>
+            <!-- LINK: driver: see 6.12.10, Component driver -->
+            <driver>
+              <range>
+                <left>15</left><right>8</right>
+              </range>
+              <defaultValue>8'h0</defaultValue>
+            </driver>
+          </drivers>
+        </wire>
+      </port>
+      <port>
+        <name>mst_data</name>
+        <wire>
+          <direction>out</direction>
+          <vectors>
+            <vector>
+              <left>7</left><right>0</right>
+            </vector>
+          </vectors>
+          <wireTypeDefs>
+            <wireTypeDef>
+              <typeName>logic</typeName>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+        </wire>
+      </port>
+      <port>
+        <name>slv_addr</name>
+        <wire>
+          <direction>in</direction>
+          <vectors>
+            <vector>
+              <left>7</left><right>0</right>
+            </vector>
+          </vectors>
+          <wireTypeDefs>
+            <wireTypeDef>
+              <typeName>logic</typeName>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+          <constraintSets>
+            <!-- LINK: constraintSet: see 6.12.13, Component wire port constraints -->
+            <constraintSet>
+              <!-- Port driven by high strength sequential cell for synthesis -->
+              <driveConstraint>
+                <!-- LINK: cellSpecification: see 6.12.15, Load and drive constraint
+                     cell specification -->
+                <cellSpecification cellStrength="high">
+                  <cellClass>sequential</cellClass>
+                </cellSpecification>
+              </driveConstraint>
+              <!-- Port timing requirements for synthesis -->
+              <!-- LINK: timingConstraint: see 6.12.14, Port timing constraints -->
+              <timingConstraint clockName="clk">60</timingConstraint>
+            </constraintSet>
+          </constraintSets>
+        </wire>
+      </port>
+      <port>
+        <name>mst_addr</name>
+        <wire>
+          <direction>out</direction>
+          <vectors>
+            <vector>
+              <left>7</left><right>0</right>
+            </vector>
+          </vectors>
+          <wireTypeDefs>
+            <wireTypeDef>
+              <typeName>logic</typeName>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+          <constraintSets>
+            <constraintSet>
+              <!-- Port drives 2 high strength sequential cells for synthesis -->
+              <loadConstraint>
+                <cellSpecification cellStrength="high">
+                  <cellClass>sequential</cellClass>
+                </cellSpecification>
+                <count>2</count>
+              </loadConstraint>
+              <!-- Port timing requirements for synthesis -->
+              <timingConstraint clockName="clk">40</timingConstraint>
+            </constraintSet>
+          </constraintSets>
+        </wire>
+      </port>
+      <!-- parity port exists in RTL view with default data type -->
+      <port>
+        <name>slv_parity</name>
+        <wire>
+          <direction>in</direction>
+          <wireTypeDefs>
+            <wireTypeDef>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+        </wire>
+      </port>
+      <!-- clock port exists in RTL view with default data type -->
+      <port>
+        <name>clk</name>
+        <wire>
+          <direction>in</direction>
+          <wireTypeDefs>
+            <wireTypeDef>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+          <drivers>
+            <driver>
+              <!-- LINK: clockDriver: see 6.12.11, Component driver/clockDriver -->
+              <clockDriver>
+                <clockPeriod>5</clockPeriod>
+                <clockPulseOffset>2.5</clockPulseOffset>
+                <clockPulseValue>1</clockPulseValue>
+                <clockPulseDuration>2.5</clockPulseDuration>
+              </clockDriver>
+            </driver>
+          </drivers>
+        </wire>
+      </port>
+      <!-- reset port exists in RTL view with default data type -->
+      <port>
+        <name>reset</name>
+        <wire>
+          <direction>in</direction>
+          <wireTypeDefs>
+            <wireTypeDef>
+              <viewRef>RTLview</viewRef>
+            </wireTypeDef>
+          </wireTypeDefs>
+          <drivers>
+            <driver>
+              <singleShotDriver>
+                <singleShotOffset>2</singleShotOffset>
+                <singleShotValue>1</singleShotValue>
+                <singleShotDuration>5</singleShotDuration>
+              </singleShotDriver>
+            </driver>
+          </drivers>
+        </wire>
+      </port>
+      <!-- status port exists in all views with default data type -->
+      <port>
+        <name>status</name>
+        <wire>
+          <direction>out</direction>
+          <vectors>
+            <vector>
+              <left>7</left><right>0</right>
+            </vector>
+          </vectors>
+        </wire>
+      </port>
+      <!-- anotherPort port exists in all views with default data type -->
+      <port>
+        <name>anotherPort</name>
+        <wire>
+          <direction>in</direction>
+          <vectors>
+            <vector>
+              <left>3</left><right>0</right>
+            </vector>
+          </vectors>
+        </wire>
+      </port>
+      <!-- slv_transaction port exists in TLM view only -->
+      <port>
+        <name>slv_transaction</name>
+        <!-- LINK: transactional: see 6.12.17, Component transactional port type -->
+        <transactional>
+          <initiative>requires</initiative>
+          <transTypeDefs>
+            <!-- LINK: transTypeDef: see 6.12.19, Component transactional port
+                 type definition -->
+            <transTypeDef>
+              <typeName>sampleTLMtype</typeName>
+              <viewRef>TLMview</viewRef>
+            </transTypeDef>
+          </transTypeDefs>
+        </transactional>
+      </port>
+      <!-- mst_transaction port exists in TLM view only -->
+      <port>
+        <name>mst_transaction</name>
+        <transactional>
+          <initiative>provides</initiative>
+          <transTypeDefs>
+            <transTypeDef>
+              <typeName>sampleTLMtype</typeName>
+              <viewRef>TLMview</viewRef>
+            </transTypeDef>
+          </transTypeDefs>
+        </transactional>
+      </port>
+    </ports>
+  </model>
+  <componentGenerators>
+    <!-- LINK: componentGenerator: see 6.13, Component generators -->
+    <componentGenerator>
+      <name>SimpleComponentGenerator</name>
+      <description>Simple TGI based component generator</description>
+      <phase>1</phase>
+      <parameters>
+        <parameter parameterId="genParm1" prompt="Parm 1"
+                          type="shortint" resolve="user">
+          <name>genParm1</name>
+          <description>First generator parameter.</description>
+          <value>1</value>
+        </parameter>
+        <parameter parameterId="genParm2" prompt="Parm 2"
+                          type="shortint" resolve="user">
+          <name>genParm2</name>
+          <description>Second generator parameter.</description>
+          <value>2</value>
+        </parameter>
+      </parameters>
+      <apiType>TGI_2014_BASE</apiType>
+      <!-- By convention, generator invoked and passed parameters as follows:
+      -->
+      <!-- generator.sh -genParm1 <value> -genParm2 <value> -->
+      <generatorExe>../bin/generator.sh</generatorExe>
+    </componentGenerator>
+  </componentGenerators>
+  <!-- LINK: choices: see 6.14, Choices -->
+  <choices>
+    <choice>
+      <name>bitsize</name>
+      <enumeration text="32 bits">32</enumeration>
+      <enumeration text="64 bits">64</enumeration>
+    </choice>
+  </choices>
+  <fileSets>
+    <!-- LINK: fileSet: see 6.15.1, File sets -->
+    <fileSet>
+      <name>VerilogFiles</name>
+      <!-- LINK: file: see 6.15.2, file -->
+      <file>
+        <name>../src/component.v</name>
+        <fileType>verilogSource</fileType>
+        <isStructural>true</isStructural>
+      </file>
+    </fileSet>
+    <fileSet>
+      <name>SystemCFiles</name>
+      <file>
+        <name>../src/component.C</name>
+        <fileType>systemCSource-2.2</fileType>
+      </file>
+    </fileSet>
+  </fileSets>
+  <whiteboxElements>
+    <!-- LINK: whiteboxElement: see 6.16, White box elements -->
+    <whiteboxElement>
+      <name>ImportantInternalSignal</name>
+      <description>Defines access point for forcing sim values</description>
+      <whiteboxType>signal</whiteboxType>
+      <driveable>true</driveable>
+    </whiteboxElement>
+  </whiteboxElements>
+  <cpus>
+    <!-- LINK: cpu: see 6.18, CPUs -->
+    <cpu>
+      <name>cpuDefn</name>
+      <addressSpaceRef addressSpaceRef="simpleAddressSpace"/>
+    </cpu>
+  </cpus>
+  <otherClockDrivers>
+    <!-- LINK: otherClockDriver: see 6.12.16, Other clock drivers -->
+    <otherClockDriver clockName="virtualClock1">
+      <clockPeriod>10</clockPeriod>
+      <clockPulseOffset>5</clockPulseOffset>
+      <clockPulseValue>1</clockPulseValue>
+      <clockPulseDuration>5</clockPulseDuration>
+    </otherClockDriver>
+  </otherClockDrivers>
+  <resetTypes>
+    <!-- TODO: MISSING definition of resetType in document -->
+    <resetType>
+      <!-- LINK: resetType: see 6.19, Reset type -->
+      <name>SOFT</name>
+      <displayName>Soft Reset</displayName>
+    </resetType>
+  </resetTypes>
+  <description>Example component used in the IP-XACT standard.</description>
+  <!-- LINK: parameters: see C.18, parameters -->
+  <parameters>
+    <!-- LINK: parameters: see C.19, attributes -->
+    <parameter parameterId="TLMModelsAvailable" prompt="TLM Models Available" type="bit" resolve="user">
+      <name>TLMModelsAvailable</name>
+      <displayName>TLM Models Available</displayName>
+      <description>Set to true if TLM simulation models are available.</description>
+      <value>0</value>
+    </parameter>
+    <parameter parameterId="comp_dual_mode" prompt="Dual Mode Supported" type="bit" resolve="user">
+      <name>comp_dual_mode</name>
+      <description>Indicates dual mode support is desired.</description>
+      <value>1</value>
+    </parameter>
+    <!-- Parameter leveraging an enumeration 'choice' -->
+    <parameter parameterId="addrBits" choiceRef="bitsize"
+                      prompt="Address Bits" type="shortint" resolve="user">
+      <name>addrBits</name>
+      <value>32</value>
+    </parameter>
+  </parameters>
+  <!-- LINK: assertions: see C.2, assertions -->
+  <assertions>
+    <assertion>
+      <name>ArbitraryAssertion1</name>
+      <description>Arbitrary assertion to show syntax. Must evaluate to true.</description>
+      <assert>TLMModelsAvailable || !comp_dual_mode</assert>
+    </assertion>
+  </assertions>
+  <!-- LINK: vendorExtensions: see C.24, vendorExtensions -->
+  <!-- TODO: Cannot handle vendor extensions yet. Re-add part once supported -->
+</component>

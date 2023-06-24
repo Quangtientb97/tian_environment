@@ -1,0 +1,19 @@
+
+CSV_REGDEF
+		User Contribute Python Documentation
+
+NAME
+	csv_regdef - generates uvm regdef for IP or SOC
+
+SYNOPSIS
+	# help document
+	csv_regdef -h
+	
+	# Generate IP-XACT xml based IP SFR test generation
+	csv_regdef -IP <ip-xact xml file> -file_out <link_to_expected_location> 
+
+	# Generate SOC IP-XACT xml based IP SFR test generation 
+	csv_regdef -SOC <config file> -file_out <link_to_expected_location> 
+
+AUTHORS
+	Tian <tientq@coasia.com>

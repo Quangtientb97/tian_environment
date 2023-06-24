@@ -1,0 +1,2 @@
+`define CLOCK_PERIOD 5
+`define RESET_CYCLE 10

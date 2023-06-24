@@ -1,0 +1,129 @@
+#-------------------------------------------------
+# 	System settings
+#-------------------------------------------------
+set autolist
+set complete=enhance
+set wrap
+set linebreak
+
+#-------------------------------------------------
+# 	set environment variable
+#-------------------------------------------------
+setenv VIM 						'~/.vim/plugged/'
+setenv DESIGNWARE_HOME 		'/coasiasemi/project/dv/tientq/my_program/SYNOPSIS_AMBA_VIP'
+setenv WS_TIENTQ 				'/coasiasemi/project/dv/tientq'
+setenv PYTHON_WS 				'~/python_dir/' 
+
+setenv PATH      				"$DESIGNWARE_HOME/bin:$PATH"
+
+#-------------------------------------------------
+#  	Set color ls
+#-------------------------------------------------
+setenv LS_COLORS 'rs=0:di=01;36:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=36;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'# {{{# }}}
+
+#-------------------------------------------------
+# 	Command line 
+#-------------------------------------------------
+#set prompt = "\n%{\033[1;32m%}[%{\033[1;32m%}`hostname` %{\033[1;32m%}:%{\033[0m%} %{\033[1;32m%}`pwd`%{\033[1;32m%}] `date +%T`\n%{\033[1;34m%}  (%{\033[1;34m%}>.<%{\033[1;34m%})%{\033[1;35m%}  @%{\033[0m%};ls "
+set prompt = "\n%{\033[1;32m%}[%{\033[1;32m%}`hostname` %{\033[1;32m%}:%{\033[0m%} %{\033[1;32m%}`pwd`%{\033[1;32m%}] `date +%T`\n%{\033[1;34m%}  (%{\033[1;34m%}>.<%{\033[1;34m%})%{\033[1;35m%}  @%{\033[0m%} "
+
+
+#-------------------------------------------------
+# 	Alias
+#-------------------------------------------------
+alias 	cd      		'chdir \!*; set prompt = "\n%{\033[1;32m%}[%{\033[1;32m%}`hostname` %{\033[1;32m%}:%{\033[0m%} %{\033[1;32m%}`pwd`%{\033[32m%}] \n%{\033[1;34m%}  (%{\033[1;34m%}>.<%{\033[1;34m%})%{\033[1;35m%}  @%{\033[0;0m%} "; ls'
+alias    line_cmt    'echo "#----------------------------------------------------------------------#"'
+alias 	b      		'cd ../ '
+alias 	bb     		'cd ../../'
+alias 	bbb     		'cd ../../../'
+alias 	cd_output 	'cd /coasiasemi/project/dv/uvm_academy_output/;cd .'
+alias 	cd_uvm 		'chdir /coasiasemi/home/tientq/uvm_academy_labs/;cd .'
+alias 	x_env   		'source /coasiasemi/home/eda.admin/env/xceliumml.env'
+alias 	v_env   		'source /coasiasemi/home/eda.admin/env/std_vcs.env'
+alias 	v_env   		'source /coasiasemi/project/dv/tientq/tian_WS/std_vcs.env'
+alias    all_env     'source /coasiasemi/project2/dv/members/shared/csv-env/all_env_snps01.csh'
+
+alias    ma          'mkdir'
+alias    mm          'mv'
+alias    mc          'cp -rf'
+alias    pl				'perl'
+alias    py				'python3'
+
+alias	mkae			make
+alias	so				source
+alias srun 			'~/V202103/bin/srun'
+alias compilec    'make clean; make all'
+alias py_func     'python3 ~/python_dir/python_function.py'
+alias ws_env 		'source $WS_TIENTQ/tian_WS/ws_env'
+
+alias gohome      'cd $WS_TIENTQ/tian_WS && source ws_env'
+alias gows        'python3 $PYTHON_WS/Connect_WS.py ;source $PYTHON_WS/env.csh'
+
+# |-- CS-Shell Directory
+alias cs_shell_dev     	/coasiasemi/project2/dv/members/shared/prerelease/cs_shell/bin/cs_shell
+alias cs_shell   		   /coasiasemi/project2/dv/members/shared/cs_shell/bin/cs_shell
+
+# |-- CS-Methodology  Directory
+alias cs_methodology   	/coasiasemi/project2/dv/members/shared/cs_shell/bin/cs_methodology
+
+alias goa53             'cd $WS_TIENTQ/tian_WS/CortexA53SingleCore_real_ram/logical/CortexA53_1/logical/testbench/execution_tb; ws_env'
+
+#-------------------------------------------------
+# Vivado
+#-------------------------------------------------
+alias vivado_env 'source /local/Vitis/Vitis_HLS/2022.2/settings64.csh; line_cmt; echo "#  get vivado environment done";line_cmt'
+
+#-------------------------------------------------
+# Stratus
+#-------------------------------------------------
+# gui start: stratus_ide
+alias stratus_env 'source ~/stratus_env'
+
+#-------------------------------------------------
+# python
+#-------------------------------------------------
+
+setenv PYTHONPATH '~/python_dir/:/coasiasemi/home/tientq/.local/lib/python3/site-packages'
+
+#-------------------------------------------------
+# auto run  
+#-------------------------------------------------
+#all_env
+cd
+clear
+printf "#----------------------------------------------------------------------#\n"
+printf "#  	           Welcome to enter tientq Enviroment                  #\n"
+printf "#----------------------------------------------------------------------#\n"
+printf "\n"
+printf "Login time: `date +%T`\n"
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------
+# 	Note
+#-------------------------------------------------------------------------
+# Black   : 30
+# Red     : 31
+# Green   : 32
+# Yellow  : 33
+# Blue    : 34
+# Magenta : 35
+# Cyan    : 36
+# White   : 37
+
+# Compress   : tar -zcvf output.tar.gz folder
+# Decompress : tar -zxvf file.tar.gz
+
+# Delete .nsf: lsof <.nsf_link>
+#
+# sed -i 's/pattern/replacement/g' file.txt
+#
+# verdi -cov -covdir <file>.vdb
+#
+# grep -rni: sensitive search
+# grep -rnI: skip search binary file
+

@@ -1,0 +1,67 @@
+#	Location
+PRJ_HOME = ${shell pwd}
+RTL_HOME = ${PRJ_HOME}/rtl
+SV_HOME  = ${PRJ_HOME}/sv
+TB_HOME  = ${PRJ_HOME}/tb
+SIM_HOME = ${PRJ_HOME}/SIM
+
+#  Compilation switches
+compile_switches    =-full64
+compile_switches   +=-debug_access+all
+compile_switches   +=-sverilog
+compile_switches   +=-timescale="1ns/100ps"
+
+#  UVM switches
+compile_switches   +=-ntb_opts uvm-1.2
+compile_switches   +=-cm line+cond+fsm+tgl+branch+assert
+
+# 	Increase directory
+compile_switches   +=+incdir+${PRJ_HOME}/sv
+compile_switches   +=+incdir+${PRJ_HOME}/tb
+compile_switches   +=+incdir+${PRJ_HOME}/rtl
+compile_switches   +=+incdir+${PRJ_HOME}/lib/csv_apb
+compile_switches   +=+incdir+${PRJ_HOME}/include/sverilog
+compile_switches   +=+incdir+${PRJ_HOME}/source/sverilog/vcs
+compile_switches   +=+incdir+${PRJ_HOME}/src/sverilog/vcs/
+
+# 	Define
+compile_switches   +=+define+SYNOPSYS_SV
+
+
+# 	Compile file
+compile_files += -f ${RTL_HOME}/vcode.f
+compile_files +=${TB_HOME}/top.sv
+
+# 	UVM running option
+run_switches  = +UVM_TESTNAME=apb_base_test
+run_switches += +UVM_VERBOSITY=UVM_LOW
+
+# 	Coverage and misc
+run_switches += -cm line+cond+fsm+tgl+branch+assert
+run_switches += -debug_access
+run_switches += -l sim.log
+
+#   Make targets
+sim: clean compile run
+
+compile:
+	mkdir -p ${SIM_HOME};
+	cd ${SIM_HOME};                          \
+	rm -rf *                              ;\
+	vcs ${compile_switches} ${compile_files} ;\
+	cd ${PRJ_HOME}
+
+run:
+	cd ${SIM_HOME} ;\
+	./simv ${run_switches}\
+	echo ""\
+	echo "./SIM/sim.log"\
+	echo ""
+
+wave:
+	cd ${SIM_HOME} ;\
+	dve -mode64 -vpd top.vpd
+
+clean:
+	rm -rf ${SIM_HOME}/*;
+

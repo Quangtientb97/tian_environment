@@ -1,0 +1,3 @@
+<xml link>, <class name>,<object name>,<addr offset ex: 0x0c>
+Example:
+CMU_MIF_1.0.xml, cmu_mif_reg_blk_c, cmu_mif0_reg_blk, 0x0c

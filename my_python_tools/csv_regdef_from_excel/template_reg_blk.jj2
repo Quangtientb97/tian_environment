@@ -1,0 +1,41 @@
+`ifndef SUV_{{block_name.upper()}}_REG_BLK_C
+`define SUV_{{block_name.upper()}}_REG_BLK_C
+
+class {{block_name}}_reg_blk_c extends uvm_reg_block;
+
+	{%- for reg in registers %}
+		{%- set reg_name=reg[1] %} 
+	rand {{block_name}}_{{reg_name}}_c {{reg_name}};
+	{%- endfor%} 
+
+	`uvm_object_utils({{block_name}}_reg_blk_c)
+
+	function new(string name = "{{block_name}}_reg_blk_c");
+		super.new(name);
+	endfunction	// new
+
+	virtual function void build();
+
+		default_map = create_map("default_map", `UVM_REG_DATA_WIDTH'h0, `UVM_REG_DATA_WIDTH/8, UVM_LITTLE_ENDIAN);
+	{% for reg in registers %}
+		{%- set reg_name=reg[1] %} 
+		{%- set reg_addr=reg[0] %} 
+		this.{{reg_name}} = {{block_name}}_{{reg_name}}_c::type_id::create("{{reg_name}}");
+		this.{{reg_name}}.configure(this, null);
+		this.{{reg_name}}.build();
+		default_map.add_reg({{reg_name}}, 'h{{reg_addr}});
+	{% endfor%} 
+
+	endfunction	// build
+
+	virtual function void set_sequence_base(uvm_sequence_base parent = null);
+	{%- for reg in registers %}
+		{%- set reg_name=reg[1] %} 
+		{%- set reg_addr=reg[0] %} 
+		{{reg_name}}.set_sequence_base(parent);
+	{%- endfor%} 
+	endfunction	// set_sequence_base
+
+endclass: {{block_name}}_reg_blk_c
+
+`endif // SUV_{{block_name.upper()}}_REG_BLK_C

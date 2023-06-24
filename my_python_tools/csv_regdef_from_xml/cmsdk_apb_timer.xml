@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+//============================================================================
+// The confidential and proprietary information contained in this file may
+// only be used by a person authorised under and to the extent permitted
+// by a subsisting licensing agreement from ARM Limited or its affiliates.
+//
+//     (C) COPYRIGHT 2016-2017 ARM Limited or its affiliates.
+//     ALL RIGHTS RESERVED
+//
+// This entire notice must be reproduced on all copies of this file
+// and copies of this file may only be made by a person if such person is
+// permitted to do so under the terms of a subsisting license agreement
+// from ARM Limited or its affiliates.
+//
+//      SVN Information
+//
+//      Checked In          : $Date: 2017-10-10 15:55:38 +0100 (Tue, 10 Oct 2017) $
+//
+//      Revision            : $Revision: 371321 $
+//
+//      Release Information : Cortex-M System Design Kit-r1p1-00rel0
+//
+//============================================================================
+-->
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009" xsi:schemaLocation="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009 http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009/index.xsd">
+    <vendor>arm.com</vendor>
+    <library>CoreLink</library>
+    <name>apb</name>
+    <version>r0p0_1</version>
+    <busInterfaces>
+        <!-- APB_Timer_Slave -->
+        <busInterface>
+            <name>APB_Timer_Slave</name>
+            <description>Access interface for apb_timer</description>
+            <busType vendor="amba.com" library="AMBA3" name="APB" version="r2p0_0"/>
+            <abstractionType vendor="amba.com" library="AMBA3" name="APB_rtl" version="r2p0_0"/>
+            <slave>
+                <memoryMapRef memoryMapRef="APB_Timer_Slave_MM"/>
+            </slave>
+            <connectionRequired>true</connectionRequired>
+            <portMaps>
+                <portMap>
+                    <logicalPort>
+                        <name>PSELx</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PSEL</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PCLK</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PCLKG</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PRESETn</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PRESETn</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PADDR</name>
+                        <vector>
+                            <left>11</left>
+                            <right>2</right>
+                        </vector>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PADDR</name>
+                        <vector>
+                            <left>11</left>
+                            <right>2</right>
+                        </vector>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PENABLE</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PENABLE</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PWRITE</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PWRITE</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PRDATA</name>
+                        <vector>
+                            <left>31</left>
+                            <right>0</right>
+                        </vector>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PRDATA</name>
+                        <vector>
+                            <left>31</left>
+                            <right>0</right>
+                        </vector>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PWDATA</name>
+                        <vector>
+                            <left>31</left>
+                            <right>0</right>
+                        </vector>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PWDATA</name>
+                        <vector>
+                            <left>31</left>
+                            <right>0</right>
+                        </vector>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PREADY</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PREADY</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>PSLVERR</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PSLVERR</name>
+                    </physicalPort>
+                </portMap>
+            </portMaps>
+        </busInterface>
+        <!-- interrupt_Timer_Master -->
+        <busInterface>
+            <name>interrupt_Timer_Master</name>
+            <description>Interrupt interface for APB Timer. Interrupt request generated at counter 0 and held until cleared by writing to register.</description>
+            <busType library="generic" name="interrupt" vendor="arm.com" version="r0p0_0"/>
+            <abstractionType library="generic" name="interrupt_rtl" vendor="arm.com" version="r0p0_0"/>
+            <master/>
+            <connectionRequired>true</connectionRequired>
+            <portMaps>
+                <portMap>
+                    <logicalPort>
+                        <name>CLK</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>PCLK</name>
+                    </physicalPort>
+                </portMap>
+                <portMap>
+                    <logicalPort>
+                        <name>IRQ</name>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>TIMERINT</name>
+                    </physicalPort>
+                </portMap>
+            </portMaps>
+        </busInterface>
+        <!--  Staticcfg_ECOrevnum_Slave  -->
+        <busInterface>
+            <name>Staticcfg_ECOrevnum_Slave</name>
+            <description>ECO Revision tie-off. The ECOREVNUM input signal is connected to the ECO revision number in Peripheral ID Register 3</description>
+            <busType vendor="arm.com" library="generic" name="Staticcfg" version="r0p0_0"/>
+            <abstractionType vendor="arm.com" library="generic" name="Staticcfg_rtl" version="r0p0_0"/>
+            <slave/>
+            <connectionRequired>true</connectionRequired>
+            <portMaps>
+                <portMap>
+                    <logicalPort>
+                        <name>CONFIGURATION</name>
+                        <vector>
+                          <left>3</left>
+                          <right>0</right>
+                        </vector>
+                    </logicalPort>
+                    <physicalPort>
+                        <name>ECOREVNUM</name>
+                        <vector>
+                          <left>3</left>
+                          <right>0</right>
+                        </vector>
+                    </physicalPort>
+                </portMap>
+            </portMaps>
+        </busInterface>
+    </busInterfaces>
+    <memoryMaps>
+        <!--  Memory Map for APB_Timer_Slave_MM  -->
+        <memoryMap>
+            <name>APB_Timer_Slave_MM</name>
+            <description>APB_timer_registers</description>
+            <addressBlock>
+                <name>addressBlock0</name>
+                <baseAddress>0</baseAddress>
+                <range>4096</range>
+                <width>32</width>
+                <usage>register</usage>
+                <register>
+                    <name>CTRL</name>
+                    <displayName>Timer control register</displayName>
+                    <description>Control register</description>
+                    <addressOffset>0x000</addressOffset>
+                    <size>32</size>
+                    <access>read-write</access>
+                    <reset>
+                        <value>0x0</value>
+                        <mask>0xF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_4</name>
+                        <displayName>Reserved_31_4</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>28</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>TimerIntEn</name>
+                        <description>Timer interrupt enable bit</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-write</access>
+                        <enumeratedValues>
+                            <enumeratedValue usage="read">
+                                <name>TIMER_INTERRUPT_0</name>
+                                <description>0b0 : Timer interrupt bit low (default)</description>
+                                <value>0x0</value>
+                            </enumeratedValue>
+                            <enumeratedValue usage="read">
+                                <name>TIMER_INTERRUPT_1</name>
+                                <description>0b1 : Timer interrupt bit high</description>
+                                <value>0x1</value>
+                            </enumeratedValue>
+                        </enumeratedValues>
+                    </field>
+                    <field>
+                        <name>SelectExtClk</name>
+                        <description>Select external input as clock. The external input can be used as a clock</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-write</access>
+                        <enumeratedValues>
+                            <enumeratedValue usage="read">
+                                <name>EXTIN_AS_CLOCK_0</name>
+                                <description>0b0 : External input as clock bit low (default)</description>
+                                <value>0x0</value>
+                            </enumeratedValue>
+                            <enumeratedValue usage="read">
+                                <name>EXTIN_AS_CLOCK_1</name>
+                                <description>0b1 : External input as clock bit high</description>
+                                <value>0x1</value>
+                            </enumeratedValue>
+                        </enumeratedValues>
+                    </field>
+                    <field>
+                        <name>SelectExtEn</name>
+                        <description>Select external input as enable. The zero to one transition of the external input can be used as a timer enable</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-write</access>
+                        <enumeratedValues>
+                            <enumeratedValue usage="read">
+                                <name>EXTIN_AS_ENABLE_0</name>
+                                <description>0b0 : External input as timer bit low (default)</description>
+                                <value>0x0</value>
+                            </enumeratedValue>
+                            <enumeratedValue usage="read">
+                                <name>EXTIN_AS_ENABLE_1</name>
+                                <description>0b1 : External input as timer bit high</description>
+                                <value>0x1</value>
+                            </enumeratedValue>
+                        </enumeratedValues>
+                    </field>
+                    <field>
+                        <name>Enable</name>
+                        <description>Enable bit.</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-write</access>
+                        <enumeratedValues>
+                            <enumeratedValue usage="read">
+                                <name>ENABLE_0</name>
+                                <description>0b0 : Timer enable bit low (default)</description>
+                                <value>0x0</value>
+                            </enumeratedValue>
+                            <enumeratedValue usage="read">
+                                <name>ENABLE_1</name>
+                                <description>0b1 : Timer enable bit high</description>
+                                <value>0x1</value>
+                            </enumeratedValue>
+                        </enumeratedValues>
+                    </field>
+                </register>
+                <register>
+                    <name>VALUE</name>
+                    <displayName>Current value register</displayName>
+                    <description>Current value register</description>
+                    <addressOffset>0x004</addressOffset>
+                    <size>32</size>
+                    <access>read-write</access>
+                    <reset>
+                        <value>0x00000000</value>
+                        <mask>0xFFFFFFFF</mask>
+                    </reset>
+                    <field>
+                        <name>VALUE</name>
+                        <description>Current value</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>32</bitWidth>
+                        <access>read-write</access>
+                    </field>
+                </register>
+                <register>
+                    <name>RELOAD</name>
+                    <displayName>Reload value register</displayName>
+                    <description>A write to this register sets the current value</description>
+                    <addressOffset>0x008</addressOffset>
+                    <size>32</size>
+                    <access>read-write</access>
+                    <reset>
+                        <value>0x00000000</value>
+                        <mask>0xFFFFFFFF</mask>
+                    </reset>
+                    <field>
+                        <name>RELOAD</name>
+                        <description>Reload value</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>32</bitWidth>
+                        <access>read-write</access>
+                    </field>
+                </register>
+                <register>
+                    <name>INTSTATUS</name>
+                    <displayName>Interrupt status register</displayName>
+                    <description>Interrupt status register</description>
+                    <addressOffset>0x00C</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x0</value>
+                        <mask>0x1</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_1</name>
+                        <displayName>Reserved_31_1</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>31</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>INTSTATUS</name>
+                        <description>Interrupt status</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-only</access>
+                        <enumeratedValues>
+                            <enumeratedValue usage="read">
+                                <name>INTERRUPT_DISABLED</name>
+                                <description>0b0 : Interrupt status is disabled</description>
+                                <value>0x0</value>
+                            </enumeratedValue>
+                            <enumeratedValue usage="read">
+                                <name>INTERRUPT_ENABLED</name>
+                                <description>0b1 : Interrupt status is enabled</description>
+                                <value>0x1</value>
+                            </enumeratedValue>
+                        </enumeratedValues>
+                    </field>
+                </register>
+                <register>
+                    <name>INTCLEAR</name>
+                    <displayName>Interrupt clear register</displayName>
+                    <description>A write to this register clears the interrupt request.</description>
+                    <addressOffset>0x00C</addressOffset>
+                    <size>32</size>
+                    <access>read-write</access>
+                    <reset>
+                        <value>0x0</value>
+                        <mask>0x1</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_1</name>
+                        <displayName>Reserved_31_1</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>31</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>INTCLEAR</name>
+                        <description>Write one to clear interrupt.</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>write-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID4</name>
+                    <displayName>Timer Peripheral ID register 4</displayName>
+                    <description>Peripheral identification register 4</description>
+                    <addressOffset>0xFD0</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x04</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>Block_count</name>
+                        <description>Block count</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>jep106_c_code</name>
+                        <description>jep106_c_code</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID5</name>
+                    <displayName>Timer Peripheral ID register 5</displayName>
+                    <description>Peripheral identification register 5</description>
+                    <addressOffset>0xFD4</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x00</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>PID5</name>
+                        <description>Peripheral identification register 5</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID6</name>
+                    <displayName>Timer Peripheral ID register 6</displayName>
+                    <description>Peripheral identification register 6</description>
+                    <addressOffset>0xFD8</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x00</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>PID6</name>
+                        <description>Peripheral identification register 6</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID7</name>
+                    <displayName>Timer Peripheral ID register 7</displayName>
+                    <description>Peripheral identification register 7</description>
+                    <addressOffset>0xFDC</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x00</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>PID7</name>
+                        <description>Peripheral identification register 7</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID0</name>
+                    <displayName>Timer Peripheral ID register 0</displayName>
+                    <description>Peripheral identification register 0</description>
+                    <addressOffset>0xFE0</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x22</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>PID0</name>
+                        <description>Part number[7:0]</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID1</name>
+                    <displayName>Timer Peripheral ID register 1</displayName>
+                    <description>Peripheral identification register 1</description>
+                    <addressOffset>0xFE4</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0xB8</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>jep106_id_3_0</name>
+                        <description>jep106_id_3_0</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>Part_number_11_8</name>
+                        <description>Part number [11:8]</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID2</name>
+                    <displayName>Timer Peripheral ID register 2</displayName>
+                    <description>Peripheral identification register 2</description>
+                    <addressOffset>0xFE8</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x1B</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>Revision</name>
+                        <description>Revision</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>jedec_used</name>
+                        <description>jedec_used</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>jep106_id_6_4</name>
+                        <description>jep106_id_6_4</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>PID3</name>
+                    <displayName>Timer Peripheral ID register 3</displayName>
+                    <description>Peripheral identification register 3</description>
+                    <addressOffset>0xFEC</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x00</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>ECO_rev_num</name>
+                        <description>ECO revision number</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>Cust_mod_num</name>
+                        <description>Customer modification number</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                </register>
+                <register>
+                    <name>CID0</name>
+                    <displayName>Timer Component ID register 0</displayName>
+                    <description>Component identification register 0</description>
+                    <addressOffset>0xFF0</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x0D</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>CID0</name>
+                        <description>Component identification register 0</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+              </register>
+              <register>
+                    <name>CID1</name>
+                    <displayName>Timer Component ID register 1</displayName>
+                    <description>Component identification register 1</description>
+                    <addressOffset>0xFF4</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0xF0</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>CID1</name>
+                        <description>Component identification register 1</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+              </register>
+              <register>
+                    <name>CID2</name>
+                    <displayName>Timer Component ID register 2</displayName>
+                    <description>Component identification register 2</description>
+                    <addressOffset>0xFF8</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0x05</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>CID2</name>
+                        <description>Component identification register 2</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+              </register>
+              <register>
+                    <name>CID3</name>
+                    <displayName>Timer Component ID register 3</displayName>
+                    <description>Component identification register 3</description>
+                    <addressOffset>0xFFC</addressOffset>
+                    <size>32</size>
+                    <access>read-only</access>
+                    <reset>
+                        <value>0xB1</value>
+                        <mask>0xFF</mask>
+                    </reset>
+                    <field>
+                        <name>Reserved_31_8</name>
+                        <displayName>Reserved_31_8</displayName>
+                        <description>Reserved</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>24</bitWidth>
+                        <access>read-only</access>
+                    </field>
+                    <field>
+                        <name>CID3</name>
+                        <description>Component identification register 3</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                        <access>read-only</access>
+                    </field>
+              </register>
+             </addressBlock>
+        </memoryMap>
+    </memoryMaps>
+    <!-- Model Section -->
+    <model>
+        <!-- Views Section -->
+        <views>
+            <view>
+                <name>RTL</name>
+                <description>RTL view</description>
+                <envIdentifier>verilogSource:*Simulation:</envIdentifier>
+                <envIdentifier>verilogSource:*Synthesis:</envIdentifier>
+                <language>verilog</language>
+                <modelName>cmsdk_apb_timer</modelName>
+                <fileSetRef>
+                    <localName>RTL</localName>
+                </fileSetRef>
+          </view>
+        </views>
+        <!--  model=>ports section  -->
+        <ports>
+            <port>
+                <name>PCLK</name>
+                <description>PCLK for timer operation</description>
+                <wire>
+                      <direction>in</direction>
+                </wire>
+            </port>
+            <!-- PCLKG: clock for the APB register read or write logic that permits
+                 clock->peripheral register logic to stop when there is no APB activity -->
+            <port>
+                <name>PCLKG</name>
+                <description>Gated clock</description>
+                <wire>
+                    <direction>in</direction>
+                </wire>
+            </port>
+            <port>
+                <name>PRESETn</name>
+                <description>Reset</description>
+                <wire>
+                    <direction>in</direction>
+                </wire>
+            </port>
+            <port>
+                <name>PSEL</name>
+                <description>Device select</description>
+                <wire>
+                    <direction>in</direction>
+                </wire>
+            </port>
+            <port>
+                <name>PADDR</name>
+                <description>Address</description>
+                <wire>
+                    <direction>in</direction>
+                    <vector>
+                        <left>11</left>
+                        <right>2</right>
+                    </vector>
+                </wire>
+            </port>
+            <port>
+                <name>PENABLE</name>
+                <description>Transfer control</description>
+                <wire>
+                    <direction>in</direction>
+                </wire>
+            </port>
+            <port>
+                <name>PWRITE</name>
+                <description>Write control</description>
+                <wire>
+                    <direction>in</direction>
+                </wire>
+            </port>
+            <port>
+                <name>PWDATA</name>
+                <description>Write data</description>
+                <wire>
+                    <direction>in</direction>
+                    <vector>
+                        <left>31</left>
+                        <right>0</right>
+                    </vector>
+                </wire>
+            </port>
+            <port>
+                <name>ECOREVNUM</name>
+                <description>Engineering-change-order revision bits</description>
+                <wire>
+                    <direction>in</direction>
+                    <vector>
+                        <left>3</left>
+                        <right>0</right>
+                    </vector>
+                </wire>
+            </port>
+            <port>
+                <name>PRDATA</name>
+                <description>Read data</description>
+                <wire>
+                    <direction>out</direction>
+                    <vector>
+                        <left>31</left>
+                        <right>0</right>
+                    </vector>
+                </wire>
+            </port>
+            <port>
+                <name>PREADY</name>
+                <description>Device ready</description>
+                <wire>
+                    <direction>out</direction>
+                </wire>
+            </port>
+            <port>
+                <name>PSLVERR</name>
+                <description>Device error response</description>
+                <wire>
+                    <direction>out</direction>
+                </wire>
+            </port>
+            <!-- Unpackaged. It can be used as a timer enable, or it can act as an external clock, depending on CTRL register. -->
+            <port>
+                <name>EXTIN</name>
+                <description>External input</description>
+                <wire>
+                    <direction>in</direction>
+                    <driver>
+                        <defaultValue>0</defaultValue>
+                    </driver>
+                </wire>
+            </port>
+            <port>
+                <name>TIMERINT</name>
+                <description>Timer interrupt output</description>
+                <wire>
+                    <direction>out</direction>
+                </wire>
+            </port>
+        </ports>
+    </model>
+    <fileSets>
+        <fileSet>
+            <name>RTL</name>
+            <displayName/>
+            <description>This fileset describes the RTL source file for this component</description>
+            <file>
+                <name>../verilog/cmsdk_apb_timer.v</name>
+                <fileType>verilogSource-2001</fileType>
+                <isIncludeFile externalDeclarations="true">false</isIncludeFile>
+            </file>
+        </fileSet>
+    </fileSets>
+    <description>CMSDK APB Timer</description>
+</component>

@@ -1,0 +1,125 @@
+
+`ifndef SUV_{{block_name.upper()}}_{{reg_name.upper()}}_C
+`define SUV_{{block_name.upper()}}_{{reg_name.upper()}}_C
+
+`ifndef CSV_REG_COVERAGE_MODEL_E
+`define CSV_REG_COVERAGE_MODEL_E
+typedef enum {
+	CSV_CVR_REG_DIRECTION = 'h0010
+} csv_reg_coverage_model_e;
+`endif //CSV_REG_COVERAGE_MODEL_E
+
+class {{block_name}}_{{reg_name}}_c extends uvm_reg;
+	{%- for field in r_fields %}
+	rand uvm_reg_field {{field[0]}}; // {{field[4]}}
+	{%- endfor%} 
+
+	// Field for blocking operation
+	// This field is also used to solve the UVM limitation
+	// which returns wrong value in mirror(), read() commands
+	uvm_sequence_base seq_base;
+
+	// Fields for coverage
+	local uvm_access_e m_kind;
+
+	covergroup cg_vals;
+		option.per_instance = 1;
+		{% for field in r_fields %}
+			{%- if field[2] == 1 %}
+		{{field[0]}}: coverpoint {{field[0]}}.value[0:0];
+			{%- endif%} 
+			{%- if field[2] != 1 %}
+		{{field[0]}}: coverpoint {{field[0]}}.value[{{field[2] - 1}}:0]
+		{
+		`AUTO_COV_MIN_MAX({{field[2]}})
+		}
+			{%- endif%} 
+		{%- endfor%} 
+
+	endgroup
+
+	covergroup cg_direction;
+		option.per_instance = 1;
+		direction: coverpoint m_kind{
+			ignore_bins ignore_vals = {UVM_BURST_WRITE, UVM_BURST_READ};
+		}
+
+	endgroup
+
+	`uvm_object_utils({{block_name}}_{{reg_name}}_c)
+
+	function new(string name = "unmapped-{{reg_name}}");
+		super.new(name, 32, build_coverage(csv_reg_coverage_model_e'(UVM_CVR_FIELD_VALS + CSV_CVR_REG_DIRECTION)));
+		if (has_coverage(UVM_CVR_FIELD_VALS)) 
+			cg_vals = new();
+
+		if (has_coverage(CSV_CVR_REG_DIRECTION)) 
+			cg_direction = new();
+	endfunction: new
+
+	virtual function void build();
+		{%- for field in r_fields %}
+		this.{{field[0]}}    = uvm_reg_field::type_id::create("{{field[0]}}");
+		{%- endfor%} 
+
+		{%- for field in r_fields %}
+			{%- set field_name        = field[0] %}
+			{%- set field_bitOffset   = field[1] %}
+			{%- set field_bitWidth    = field[2] %}
+			{%- set field_reset_value = field[3] %}
+			{%- set field_description = field[4] %}
+			{%- set field_policy      = field[5] %}
+		this.{{field_name}}.configure(this, {{field_bitWidth}}, {{field_bitOffset}}, "{{field_policy}}", 0, 'h{{field_reset_value}}, 1, 1, 1);
+		{%- endfor%} 
+
+		if (has_coverage(UVM_CVR_FIELD_VALS))
+			cg_vals.set_inst_name({get_full_name(), ".cg_vals"});
+
+		if (has_coverage(CSV_CVR_REG_DIRECTION))
+			cg_direction.set_inst_name({get_full_name(), ".cg_direction"});
+
+	endfunction	// build
+
+	protected virtual function void sample(uvm_reg_data_t data,
+		uvm_reg_data_t byte_en,
+		bit is_read,
+		uvm_reg_map map);
+
+		if (get_coverage(CSV_CVR_REG_DIRECTION)) begin
+			if (!is_read) m_kind = UVM_WRITE;
+			else m_kind = UVM_READ;
+			cg_direction.sample();
+		end 
+
+		if (get_coverage(UVM_CVR_FIELD_VALS)) begin
+			cg_vals.sample();
+		end 
+
+	endfunction: sample
+
+	virtual function void sample_values();
+		super.sample_values();
+
+		// TBD
+	endfunction	// sample_values
+
+	// Function and task for blocking operation
+	// This field is also used to solve the UVM limitation
+	// which returns wrong value in mirror(), read() commands
+	virtual function void set_sequence_base(uvm_sequence_base parent = null);
+		`uvm_info(get_type_name(), "set_sequence_base() ...", UVM_FULL)
+		seq_base = parent;
+	endfunction	// set_sequence_base
+
+	virtual task pre_write(uvm_reg_item rw);
+		rw.parent = seq_base;
+	endtask: pre_write
+
+	virtual task pre_read(uvm_reg_item rw);
+		rw.parent = seq_base;
+	endtask: pre_read
+
+endclass: {{block_name}}_{{reg_name}}_c
+
+`endif // SUV_{{block_name.upper()}}_{{reg_name.upper()}}_C
+

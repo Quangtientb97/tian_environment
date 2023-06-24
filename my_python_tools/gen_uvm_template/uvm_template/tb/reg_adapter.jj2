@@ -1,0 +1,85 @@
+`ifndef {{__fill__.upcase()}}_REG_ADAPTER
+`define {{__fill__.upcase()}}_REG_ADAPTER
+
+
+// --------------------------------------- 
+// The class should be handled in tb_c   
+// ---------------------------------------
+// In tb_c
+// |-- Properties
+//   	 spi_slv_reg_blk                                     _reg_model ;
+//   	 spi_slv_reg_adapter                                 _adapter   ;
+//   	 uvm_reg_predictor#(    vip_apb_mstr_trans    )      _predictor ;
+//								   <uvm_sequence_item type> : Use for detect bus2reg
+// |-- Build phase
+// 	 handle class
+//     _reg_model.build();
+//     _reg_model.lock_model();
+//     _reg_model.set_hdl_path_root("$root.spi_slv_top._spi_slv.apbctrl");
+// |-- Connect phase
+//     _reg_model.default_map.set_sequencer(_apb_mstr_agent._seqr, _adapter);
+//     _reg_model.default_map.set_auto_predict(0);
+//     _predictor.map      = _reg_model.default_map;
+//     _predictor.adapter  = _adapter;
+//     _agent._trans_ap.connect(_predictor.bus_in);
+
+class {{__fill__}}_reg_adapter_c extends uvm_reg_adapter;
+
+	`uvm_object_utils({{__fill__}}_reg_adapter)
+
+	function new(string name = "{{__fill__}}_reg_adapter");
+		super.new(name);
+	endfunction 
+
+	// uvm_reg_bus_op
+	// |-- kind 		Kind of access: READ or WRITE.
+	// |-- addr 		The bus address.
+	// |-- data 		The data to write.
+	// |-- n_bits 		The number of bits of uvm_reg_item::value being transferred by
+	//     				this transaction.
+	// |-- byte_en 	Enables for the byte lanes on the bus.
+	// |-- status 		The result of the transaction: UVM_IS_OK, UVM_HAS_X, UVM_NOT_OK.
+
+	//  reg2bus function
+	//  Arguments
+	//  	rw  : Bus operation (ref)
+	//  Return   
+	//		uvm_sequence_item
+	virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
+		{{__fill__}}_transaction tr = {{__fill__}}_transaction::type_id::create("tr");
+		tr.hwr_rd      = (rw.kind==UVM_WRITE)? {{__fill__}}_pkg::{{__fill__.upcase()}}_WRITE : {{__fill__}}_pkg::{{__fill__.upcase()}}_READ;
+		tr.haddr       = rw.addr;
+		tr.hdata       = rw.data;
+		return tr;
+	endfunction
+
+	//  bus2reg function
+	//  Arguments
+	//      bus_item: Sequence item (input)
+	//      rw      : Bus operation (ref  )
+	virtual function void bus2reg(uvm_sequence_item bus_item, ref uvm_reg_bus_op rw);
+		{{__fill__}}_transaction tr;
+		if (!$cast(tr,bus_item)) begin 
+			`uvm_fatal("{{__fill__.upcase()}}_ADPTR","Provided bus_item not correct type")
+			return;
+		end
+
+		if (_bus._trans == APB_WRITE) begin
+			rw.kind    = UVM_WRITE;
+			rw.data    = _bus._trans_wdata  ;
+		end
+		else begin
+			rw.kind    = UVM_READ;
+			rw.data    = _bus._trans_rdata  ;
+		end
+		rw.addr    = _bus._trans_addr   ;
+		rw.byte_en = _bus._trans_strb   ;
+		if      ($isunknown(_bus._trans_resp)   )   rw.status  = UVM_NOT_OK ;
+		else if (_bus._trans_resp === '1        )   rw.status  = UVM_NOT_OK ;
+		else if ($isunknown(_bus._trans_rdata)  )   rw.status  = UVM_HAS_X  ;
+		else                                        rw.status  = UVM_IS_OK  ;
+	endfunction
+
+endclass : {{__fill__}}_reg_adapter
+
+`endif // {{__fill__.upcase()}}_REG_ADAPTER

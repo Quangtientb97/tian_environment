@@ -1,0 +1,52 @@
+`include "defines.sv"
+//`include "pkg.sv" // package of UVC
+
+module top;
+	import uvm_pkg::*;
+	`include "uvm_macros.svh"
+
+	import {{ env_name }}_pkg::*;
+	`include "vseqr.sv"
+	`include "tb.sv"
+	`include "seqs_lib.sv"
+	`include "basic_test.sv"
+
+	// Define parameters
+	parameter clock_period = `CLOCK_PERIOD;
+	parameter PHASE_TIME   = clock_period/ 2.0;
+	parameter reset_cycle  = `RESET_CYCLE;
+
+	// Define clock & reset
+	reg SystemClock;
+	reg nReset;
+	initial begin
+		SystemClock = 0;
+		forever begin
+			#PHASE_TIME SystemClock = ~SystemClock;
+		end
+	end
+	initial begin
+		nReset = 0;
+		for (integer i=0; i<reset_cycle; i=i+1) begin
+			@(posedge SystemClock);
+		end
+		nReset = 1;
+	end
+
+	// Declare interface and connect
+	{{ env_name }}_master_intf {{ env_name }}_master0_intf() ;
+	{{ env_name }}_slave_intf  {{ env_name }}_slave0_intf()  ;
+	{{ env_name }}_slave_intf  {{ env_name }}_slave1_intf()  ;
+	// input of DUT will be driven by uvm_driver
+	
+	initial begin
+		uvm_config_db#(virtual {{ env_name }}_master_intf)::set(null, "uvm_test_top.tb.{{ env_name }}_env.master.*" , "vintf", {{ env_name }}_master0_intf);
+		uvm_config_db#(virtual {{ env_name }}_slave_intf)::set(null,  "uvm_test_top.tb.{{ env_name }}_env.slave[0].*", "vintf", {{ env_name }}_slave0_intf);
+		uvm_config_db#(virtual {{ env_name }}_slave_intf)::set(null,  "uvm_test_top.tb.{{ env_name }}_env.slave[1].*", "vintf", {{ env_name }}_slave1_intf);
+	end
+
+	initial begin
+		run_test();
+	end
+
+endmodule
